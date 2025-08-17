@@ -1,0 +1,630 @@
+﻿<Page x:Class="New_API_scraper.pages.MainPostViewer"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:New_API_scraper.pages"
+      xmlns:utils="clr-namespace:New_API_scraper.Utils"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainPostViewer">
+
+    <Grid Background="#FF0A0A0A">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header with navigation and close buttons -->
+        <Grid x:Name="header_grid" Grid.Row="0" Background="#FF1A1A1A">
+            <TextBlock Text="Post Viewer" 
+                      FontSize="18" 
+                      FontWeight="Bold" 
+                      Foreground="#FF00FF88" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Left" 
+                      Margin="20,0"/>
+            
+            <!-- Right side buttons stack -->
+            <StackPanel Orientation="Horizontal" 
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0">
+                
+                <!-- Back to API Selector button -->
+                <Button x:Name="back_to_selector_btn"
+                        Content="← API Selector"
+                        Height="35"
+                        Padding="15,8"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,10,0"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="White"
+                        Cursor="Hand"
+                        Click="back_to_selector_btn_click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="17"
+                                    x:Name="back_border">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="back_border" Property="Background" Value="#FF00AA44"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#FF006600"/>
+                        </Style>
+                    </Button.Style>
+                    <Button.Effect>
+                        <DropShadowEffect Color="#FF00FF88" BlurRadius="8" ShadowDepth="0" Opacity="0.3"/>
+                    </Button.Effect>
+                </Button>
+                
+                <!-- Close button -->
+                <Button x:Name="close_btn"
+                        Content="×"
+                        Width="40"
+                        Height="40"
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="#FFCCCCCC"
+                        Cursor="Hand"
+                        Click="close_btn_click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                x:Name="close_border">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="close_border" Property="Background" Value="#FFAA3333"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#FF333333"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            </StackPanel>
+        </Grid>
+        
+        <!-- Main content area with sidebar -->
+        <Grid Grid.Row="1" Background="#FF0A0A0A">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Main content area -->
+            <Border x:Name="main_content" Grid.Column="0" Background="#FF0A0A0A" Margin="10" CornerRadius="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- Header with search and controls -->
+                    <Border Grid.Row="0" Background="#FF1A1A1A" CornerRadius="10,10,0,0" Padding="15,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Grid.Column="0" Text="Posts" 
+                                      FontSize="20" 
+                                      FontWeight="Bold" 
+                                      Foreground="#FF00FF88" 
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,20,0"/>
+                            
+                            <Grid Grid.Column="1" VerticalAlignment="Center">
+                                <TextBox x:Name="search_box" 
+                                        Height="30" 
+                                        Background="#FF2A2A2A" 
+                                        Foreground="White" 
+                                        BorderBrush="#FF444444" 
+                                        BorderThickness="1" 
+                                        Padding="10,5" 
+                                        FontSize="12"
+                                        Text="Search tags..."
+                                        GotFocus="search_box_got_focus"
+                                        LostFocus="search_box_lost_focus"
+                                        KeyDown="search_box_key_down"
+                                        TextChanged="search_box_text_changed"/>
+                                
+                                <!-- Autocomplete Popup -->
+                                <Popup x:Name="autocomplete_popup" 
+                                       PlacementTarget="{Binding ElementName=search_box}"
+                                       Placement="Bottom"
+                                       AllowsTransparency="True"
+                                       StaysOpen="False"
+                                       IsOpen="False"
+                                       Width="{Binding ElementName=search_box, Path=ActualWidth}">
+                                    <Border Background="#FF2A2A2A" 
+                                           BorderBrush="#FF00FF88" 
+                                           BorderThickness="1" 
+                                           CornerRadius="5"
+                                           MaxHeight="200">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#FF000000" BlurRadius="10" ShadowDepth="2" Opacity="0.8"/>
+                                        </Border.Effect>
+                                        
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                                     HorizontalScrollBarVisibility="Disabled">
+                                            <ListBox x:Name="autocomplete_list" 
+                                                    Background="Transparent" 
+                                                    BorderThickness="0"
+                                                    SelectionMode="Single"
+                                                    MouseLeftButtonUp="autocomplete_item_click"
+                                                    SelectionChanged="autocomplete_selection_changed">
+                                                <ListBox.ItemContainerStyle>
+                                                    <Style TargetType="ListBoxItem">
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="Padding" Value="10,5"/>
+                                                        <Setter Property="Margin" Value="1"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ListBoxItem">
+                                                                    <Border x:Name="item_border" 
+                                                                           Background="{TemplateBinding Background}"
+                                                                           CornerRadius="3"
+                                                                           Padding="{TemplateBinding Padding}">
+                                                                        <ContentPresenter/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="item_border" Property="Background" Value="#FF444444"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsSelected" Value="True">
+                                                                            <Setter TargetName="item_border" Property="Background" Value="#FF00AA44"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </ListBox.ItemContainerStyle>
+                                            </ListBox>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                            
+                            <Button x:Name="search_btn" 
+                                   Grid.Column="2" 
+                                   Content="Search" 
+                                   Height="30" 
+                                   Width="80" 
+                                   Background="#FF00AA44" 
+                                   Foreground="White" 
+                                   BorderThickness="0" 
+                                   Margin="10,0,0,0" 
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Cursor="Hand"
+                                   Click="search_btn_click"/>
+                            
+                            <Button x:Name="refresh_btn" 
+                                   Grid.Column="3" 
+                                   Content="↻" 
+                                   Height="30" 
+                                   Width="30" 
+                                   Background="#FF333333" 
+                                   Foreground="White" 
+                                   BorderThickness="0" 
+                                   Margin="5,0,0,0" 
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Cursor="Hand"
+                                   Click="refresh_btn_click"/>
+                            
+                            <Button x:Name="settings_btn" 
+                                   Grid.Column="4" 
+                                   Content="⚙" 
+                                   Height="30" 
+                                   Width="30" 
+                                   Background="#FF333333" 
+                                   Foreground="White" 
+                                   BorderThickness="0" 
+                                   Margin="5,0,0,0" 
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Cursor="Hand"
+                                   Click="settings_btn_click"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Posts grid -->
+                    <ScrollViewer Grid.Row="1" 
+                                 VerticalScrollBarVisibility="Auto" 
+                                 HorizontalScrollBarVisibility="Disabled"
+                                 Background="Transparent">
+                        <ItemsControl x:Name="posts_grid" Margin="15">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FF1A1A1A" 
+                                           CornerRadius="8" 
+                                           Margin="5" 
+                                           Cursor="Hand"
+                                           MouseLeftButtonDown="post_item_click">
+                                        <Border.ContextMenu>
+                                            <ContextMenu Background="#FF1A1A1A" 
+                                                        BorderBrush="#FF00FF88" 
+                                                        BorderThickness="1"
+                                                        Padding="5"
+                                                        HasDropShadow="True">
+                                                <ContextMenu.Effect>
+                                                    <DropShadowEffect Color="#FF000000" BlurRadius="10" ShadowDepth="2" Opacity="0.8"/>
+                                                </ContextMenu.Effect>
+                                                <ContextMenu.Resources>
+                                                    <Style TargetType="ContextMenu">
+                                                        <Setter Property="OverridesDefaultStyle" Value="True"/>
+                                                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ContextMenu">
+                                                                    <Border x:Name="Border"
+                                                                           Background="{TemplateBinding Background}"
+                                                                           BorderBrush="{TemplateBinding BorderBrush}"
+                                                                           BorderThickness="{TemplateBinding BorderThickness}"
+                                                                           CornerRadius="8"
+                                                                           Padding="{TemplateBinding Padding}">
+                                                                        <StackPanel IsItemsHost="True" 
+                                                                                   KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                    <Style TargetType="MenuItem">
+                                                        <Setter Property="Background" Value="#FF1A1A1A"/>
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                        <Setter Property="Padding" Value="10,8"/>
+                                                        <Setter Property="Margin" Value="2"/>
+                                                        <Setter Property="FontSize" Value="13"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="MenuItem">
+                                                                    <Border x:Name="Border" 
+                                                                           Background="{TemplateBinding Background}"
+                                                                           BorderBrush="Transparent"
+                                                                           BorderThickness="1"
+                                                                           CornerRadius="6"
+                                                                           Padding="{TemplateBinding Padding}">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                            </Grid.ColumnDefinitions>
+                                                                            <ContentPresenter Grid.Column="0" 
+                                                                                            ContentSource="Icon" 
+                                                                                            Margin="0,0,8,0"
+                                                                                            VerticalAlignment="Center"/>
+                                                                            <ContentPresenter Grid.Column="1" 
+                                                                                            ContentSource="Header" 
+                                                                                            VerticalAlignment="Center"/>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsHighlighted" Value="True">
+                                                                            <Setter TargetName="Border" Property="Background" Value="#FF333333"/>
+                                                                            <Setter TargetName="Border" Property="BorderBrush" Value="#FF00FF88"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter Property="Foreground" Value="#FF666666"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                    <Style TargetType="Separator">
+                                                        <Setter Property="Background" Value="#FF444444"/>
+                                                        <Setter Property="Height" Value="1"/>
+                                                        <Setter Property="Margin" Value="5,3"/>
+                                                    </Style>
+                                                </ContextMenu.Resources>
+                                                
+                                                <MenuItem Header="Copy Image" Click="copy_image_click">
+                                                    <MenuItem.Icon>
+                                                        <Border Background="#FF00AA44" 
+                                                               CornerRadius="3" 
+                                                               Width="16" 
+                                                               Height="16">
+                                                            <TextBlock Text="📋" 
+                                                                      FontSize="10" 
+                                                                      HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                                
+                                                <MenuItem Header="Copy URL" Click="copy_url_click">
+                                                    <MenuItem.Icon>
+                                                        <Border Background="#FF0088CC" 
+                                                               CornerRadius="3" 
+                                                               Width="16" 
+                                                               Height="16">
+                                                            <TextBlock Text="🔗" 
+                                                                      FontSize="10" 
+                                                                      HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                                
+                                                <Separator/>
+                                                
+                                                <MenuItem Header="Open in Detail View" Click="open_detail_click">
+                                                    <MenuItem.Icon>
+                                                        <Border Background="#FFAA6600" 
+                                                               CornerRadius="3" 
+                                                               Width="16" 
+                                                               Height="16">
+                                                            <TextBlock Text="🔍" 
+                                                                      FontSize="10" 
+                                                                      HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Border.ContextMenu>
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#FF00FF88" BlurRadius="5" ShadowDepth="0" Opacity="0.3"/>
+                                        </Border.Effect>
+                                        <Grid Width="200" Height="250">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="180"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            
+                                            <!-- Image -->
+                                            <Border Grid.Row="0" CornerRadius="8,8,0,0" ClipToBounds="True">
+                                                <Grid>
+                                                    <Image x:Name="post_image" 
+                                                          utils:AuthenticatedImageLoader.AuthSource="{Binding preview_url}"
+                                                          Stretch="UniformToFill"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center"/>
+                                                    
+                                                    <!-- Video play overlay -->
+                                                    <Border Background="#80000000" 
+                                                           CornerRadius="25" 
+                                                           Width="50" 
+                                                           Height="50" 
+                                                           HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{Binding video_overlay_visibility}">
+                                                        <TextBlock Text="▶" 
+                                                                  Foreground="White" 
+                                                                  FontSize="20" 
+                                                                  FontWeight="Bold" 
+                                                                  HorizontalAlignment="Center" 
+                                                                  VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    
+                                                    <!-- Media type indicator -->
+                                                    <Border Background="#80000000" 
+                                                           CornerRadius="3" 
+                                                           Padding="5,2" 
+                                                           HorizontalAlignment="Right" 
+                                                           VerticalAlignment="Top" 
+                                                           Margin="5">
+                                                        <TextBlock Text="{Binding media_type_text}" 
+                                                                  Foreground="White" 
+                                                                  FontSize="8" 
+                                                                  FontWeight="Bold"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                            
+                                            <!-- Info -->
+                                            <Grid Grid.Row="1" Margin="10">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                
+                                                <TextBlock Grid.Row="0" 
+                                                          Text="{Binding id, StringFormat='ID: {0}'}" 
+                                                          FontSize="10" 
+                                                          Foreground="#FFAAAAAA" 
+                                                          FontWeight="Bold"/>
+                                                
+                                                <TextBlock Grid.Row="1" 
+                                                          Text="{Binding score, StringFormat='Score: {0}'}" 
+                                                          FontSize="10" 
+                                                          Foreground="#FF00AA44" 
+                                                          Margin="0,2,0,0"/>
+                                                
+                                                <TextBlock Grid.Row="2" 
+                                                          Text="{Binding rating}" 
+                                                          FontSize="9" 
+                                                          Foreground="#FFCCCCCC" 
+                                                          VerticalAlignment="Bottom" 
+                                                          HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    
+                    <!-- Loading/Status bar -->
+                    <Border Grid.Row="2" Background="#FF1A1A1A" CornerRadius="0,0,10,10" Padding="15,10">
+    <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock x:Name="status_text" 
+                                      Grid.Column="0" 
+                                      Text="Ready to load posts..." 
+                                      FontSize="12" 
+                                      Foreground="#FFAAAAAA" 
+                                      VerticalAlignment="Center"/>
+                            
+                            <Button x:Name="prev_btn" 
+                                   Grid.Column="1" 
+                                   Content="← Prev" 
+                                   Height="25" 
+                                   Width="60" 
+                                   Background="#FF333333" 
+                                   Foreground="White" 
+                                   BorderThickness="0" 
+                                   Margin="5,0" 
+                                   FontSize="10"
+                                   Cursor="Hand"
+                                   Click="prev_btn_click"
+                                   IsEnabled="False"/>
+                            
+                            <TextBlock x:Name="page_text" 
+                                      Grid.Column="2" 
+                                      Text="Page 1" 
+                                      FontSize="12" 
+                                      Foreground="#FFAAAAAA" 
+                                      VerticalAlignment="Center"
+                                      Margin="10,0"/>
+                            
+                            <Button x:Name="next_btn" 
+                                   Grid.Column="3" 
+                                   Content="Next →" 
+                                   Height="25" 
+                                   Width="60" 
+                                   Background="#FF333333" 
+                                   Foreground="White" 
+                                   BorderThickness="0" 
+                                   Margin="5,0" 
+                                   FontSize="10"
+                                   Cursor="Hand"
+                                   Click="next_btn_click"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+            
+            <!-- Sidebar -->
+            <Border Grid.Column="1" Background="#FF1A1A1A" BorderBrush="#FF333333" BorderThickness="1,0,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                    <StackPanel Margin="15,10">
+                        
+                        <!-- Tags Section -->
+                        <Border Background="#FF2A2A2A" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="Tags" 
+                                          FontSize="18" 
+                                          FontWeight="Bold" 
+                                          Foreground="#FFFFFF" 
+                                          Margin="0,0,0,10"/>
+                                
+                                <!-- Sample tag items (empty for now) -->
+                                <StackPanel x:Name="tags_panel">
+                                    <TextBlock Text="Tags will be loaded here..." 
+                                              FontSize="12" 
+                                              Foreground="#FF888888" 
+                                              Style="{x:Null}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Options Section -->
+                        <Border Background="#FF2A2A2A" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="Options" 
+                                          FontSize="18" 
+                                          FontWeight="Bold" 
+                                          Foreground="#FFFFFF" 
+                                          Margin="0,0,0,10"/>
+                                
+                                <StackPanel x:Name="options_panel">
+                                    <TextBlock Text="Options will be loaded here..." 
+                                              FontSize="12" 
+                                              Foreground="#FF888888" 
+                                              Style="{x:Null}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Related Section -->
+                        <Border Background="#FF2A2A2A" CornerRadius="10" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="Related" 
+                                          FontSize="18" 
+                                          FontWeight="Bold" 
+                                          Foreground="#FFFFFF" 
+                                          Margin="0,0,0,10"/>
+                                
+                                <StackPanel x:Name="related_panel">
+                                    <Button Content="Deleted" 
+                                           Background="Transparent" 
+                                           Foreground="#FF4A9EFF" 
+                                           BorderThickness="0" 
+                                           HorizontalAlignment="Left" 
+                                           Padding="0,2" 
+                                           Cursor="Hand" 
+                                           FontSize="14" 
+                                           Margin="0,2"/>
+                                    <Button Content="Random" 
+                                           Background="Transparent" 
+                                           Foreground="#FF4A9EFF" 
+                                           BorderThickness="0" 
+                                           HorizontalAlignment="Left" 
+                                           Padding="0,2" 
+                                           Cursor="Hand" 
+                                           FontSize="14" 
+                                           Margin="0,2"/>
+                                    <Button Content="Count" 
+                                           Background="Transparent" 
+                                           Foreground="#FF4A9EFF" 
+                                           BorderThickness="0" 
+                                           HorizontalAlignment="Left" 
+                                           Padding="0,2" 
+                                           Cursor="Hand" 
+                                           FontSize="14" 
+                                           Margin="0,2"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

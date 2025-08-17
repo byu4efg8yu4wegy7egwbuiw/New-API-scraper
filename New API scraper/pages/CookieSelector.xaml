@@ -1,0 +1,275 @@
+﻿<Page x:Class="New_API_scraper.pages.CookieSelector"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="#FF0A0A0A"
+      Loaded="on_page_loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid x:Name="header_grid" Grid.Row="0" Background="#FF1A1A1A">
+            <TextBlock Text="Cookie Selector" 
+                      FontSize="18" 
+                      FontWeight="Bold" 
+                      Foreground="#FF00FF88" 
+                      VerticalAlignment="Center" 
+                      HorizontalAlignment="Left" 
+                      Margin="20,0"/>
+            
+            <Button x:Name="close_btn"
+                    Content="×"
+                    Width="40"
+                    Height="40"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="#FFCCCCCC"
+                    Cursor="Hand"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,10,0"
+                    Click="close_btn_click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#FF333333"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="20"
+                                            x:Name="close_border">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="close_border" Property="Background" Value="#FFAA3333"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title -->
+                <TextBlock Grid.Row="0"
+                          Text="Cookie Authentication Setup"
+                          FontSize="24"
+                          FontWeight="Bold"
+                          Foreground="White"
+                          HorizontalAlignment="Center"/>
+
+                <!-- Description -->
+                <TextBlock Grid.Row="2"
+                          Text="Select a cookie file to authenticate with APIs that require login credentials."
+                          FontSize="14"
+                          Foreground="#FFCCCCCC"
+                          TextWrapping="Wrap"
+                          HorizontalAlignment="Center"
+                          TextAlignment="Center"
+                          MaxWidth="600"/>
+
+                <!-- Cookie File Selection -->
+                <Border Grid.Row="4"
+                       Background="#FF2A2A2A"
+                       BorderBrush="#FF444444"
+                       BorderThickness="1"
+                       CornerRadius="10"
+                       Padding="20">
+                    <StackPanel>
+                        <!-- File Selection Row -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="cookie_file_path"
+                                    Grid.Column="0"
+                                    Height="35"
+                                    Background="#FF1A1A1A"
+                                    Foreground="White"
+                                    BorderBrush="#FF555555"
+                                    BorderThickness="1"
+                                    Padding="10,5"
+                                    FontSize="12"
+                                    Text="No cookie file selected..."
+                                    IsReadOnly="True"
+                                    VerticalContentAlignment="Center"/>
+
+                            <Button x:Name="browse_btn"
+                                   Grid.Column="2"
+                                   Content="Browse"
+                                   Height="35"
+                                   Width="100"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   Background="#FF006600"
+                                   Cursor="Hand"
+                                   Click="browse_btn_click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="5"
+                                                           x:Name="browse_border">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="browse_border" Property="Background" Value="#FF00AA44"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+
+                        <!-- Cookie Info Panel -->
+                        <Border x:Name="cookie_info_panel"
+                               Background="#FF1A1A1A"
+                               BorderBrush="#FF333333"
+                               BorderThickness="1"
+                               CornerRadius="5"
+                               Padding="15"
+                               Margin="0,15,0,0"
+                               Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock x:Name="cookie_filename"
+                                          Text="filename.txt"
+                                          FontSize="14"
+                                          FontWeight="Bold"
+                                          Foreground="#FF00FF88"/>
+                                
+                                <TextBlock x:Name="cookie_details"
+                                          Text="File size: 1.2 KB"
+                                          FontSize="12"
+                                          Foreground="#FFAAAAAA"
+                                          Margin="0,5,0,0"/>
+                                
+                                <TextBlock x:Name="cookie_status"
+                                          Text="✓ Cookie file loaded successfully"
+                                          FontSize="12"
+                                          Foreground="#FF00AA44"
+                                          Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,20,0,0">
+                            <Button x:Name="clear_btn"
+                                   Content="Clear"
+                                   Height="35"
+                                   Width="100"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   Background="#FF663333"
+                                   Cursor="Hand"
+                                   Margin="0,0,15,0"
+                                   Click="clear_btn_click"
+                                   IsEnabled="False"/>
+
+                            <Button x:Name="save_btn"
+                                   Content="Save"
+                                   Height="35"
+                                   Width="100"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   Background="#FF006600"
+                                   Cursor="Hand"
+                                   Click="save_btn_click"
+                                   IsEnabled="False"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Instructions -->
+                <Border Grid.Row="6"
+                       Background="#FF1A1A1A"
+                       BorderBrush="#FF333333"
+                       BorderThickness="1"
+                       CornerRadius="10"
+                       Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Supported Formats:"
+                                  FontSize="16"
+                                  FontWeight="Bold"
+                                  Foreground="#FF00FF88"
+                                  Margin="0,0,0,10"/>
+
+                        <TextBlock Text="• Netscape format (.txt, .cookies)"
+                                  FontSize="12"
+                                  Foreground="#FFCCCCCC"
+                                  Margin="0,2"/>
+                        
+                        <TextBlock Text="• JSON format (.json)"
+                                  FontSize="12"
+                                  Foreground="#FFCCCCCC"
+                                  Margin="0,2"/>
+                        
+                        <TextBlock Text="• Browser export files"
+                                  FontSize="12"
+                                  Foreground="#FFCCCCCC"
+                                  Margin="0,2"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Status -->
+                <Border Grid.Row="8"
+                       Background="#FF2A2A2A"
+                       BorderBrush="#FF444444"
+                       BorderThickness="1"
+                       CornerRadius="5"
+                       Padding="15">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="status_indicator"
+                                Width="12"
+                                Height="12"
+                                Fill="#FFAA5555"
+                                VerticalAlignment="Center"/>
+                        
+                        <TextBlock x:Name="status_text"
+                                  Text="No cookie file loaded"
+                                  FontSize="12"
+                                  Foreground="#FFCCCCCC"
+                                  VerticalAlignment="Center"
+                                  Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

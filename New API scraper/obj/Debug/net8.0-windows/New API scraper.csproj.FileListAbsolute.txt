@@ -1,0 +1,35 @@
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\New API scraper.exe
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\New API scraper.deps.json
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\New API scraper.runtimeconfig.json
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\New API scraper.dll
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\New API scraper.pdb
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\ApiSelectorWin.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper_MarkupCompile.cache
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper_MarkupCompile.lref
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\ApiSelectorWin.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.g.resources
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.AssemblyInfoInputs.cache
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.AssemblyInfo.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.csproj.CoreCompileInputs.cache
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.dll
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\refint\New API scraper.dll
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.pdb
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.genruntimeconfig.cache
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\ref\New API scraper.dll
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\MainPostViewer.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\MainPostViewer.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API scraper.csproj.AssemblyReference.cache
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\New API .CF3C8BFF.Up2Date
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\MediaPlayer\MediaPlayerControl.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\MediaPlayer\MediaPlayerControl.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\SettingsWindow.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\SettingsWindow.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\CookieSelector.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\CookieSelector.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\App.baml
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\DanbooruAuthConfig.g.cs
+C:\Users\gurag\source\repos\New API scraper\New API scraper\obj\Debug\net8.0-windows\pages\DanbooruAuthConfig.baml
